@@ -49,6 +49,16 @@
                 <strong>Amoxicilina/Ac. clavulánico:</strong> <span id="amoxiclav_result"></span>
             </li>
         </ul>
+
+        <h2 class="mt-5">Fleboclisis</h2>
+        <ul class="list-group mt-3">
+            <li class="list-group-item">
+                <strong>Velocidad de infusión (ml/h):</strong> <span id="holliday_result"></span>
+            </li>
+        </ul>
+
+        <h2 class="mt-5">Indicaciones Apendicitis</h2>
+        <pre class="border p-3" id="indicaciones_apendicitis"></pre>
     </div>
 
 <script>
@@ -63,6 +73,8 @@ document.getElementById('calcular').addEventListener('click', function () {
     let ampicilina = '';
     let cefadroxilo = '';
     let amoxiclav = '';
+    let holliday = '';
+    let indicacionesApend = '';
 
     if (!isNaN(peso)) {
         // Paracetamol
@@ -119,6 +131,25 @@ document.getElementById('calcular').addEventListener('click', function () {
             const ml = (amoxMg / 80).toFixed(1);
             amoxiclav = ml + ' ml de suspensión 400mg/57mg en 5ml c/12h VO';
         }
+
+        // Holliday-Segar para mantenimiento (ml/h)
+        let ml24 = 0;
+        if (peso <= 10) {
+            ml24 = peso * 100;
+        } else if (peso <= 20) {
+            ml24 = 1000 + (peso - 10) * 50;
+        } else {
+            ml24 = 1500 + (peso - 20) * 20;
+        }
+        holliday = (ml24 / 24).toFixed(0);
+
+        indicacionesApend =
+            '1. Régimen cero\n' +
+            '2. Reposo relativo\n' +
+            '3. Amikacina ' + amikacina + '\n' +
+            '4. Metronidazol ' + metronidazol + '\n' +
+            '5. Ampicilina ' + ampicilina + '\n' +
+            '6. S. glucosalino ' + holliday + ' ml/h EV';
     } else {
         paracetamol = 'Ingrese un peso válido';
         ketorolaco = 'Ingrese un peso válido';
@@ -129,6 +160,8 @@ document.getElementById('calcular').addEventListener('click', function () {
         ampicilina = 'Ingrese un peso válido';
         cefadroxilo = 'Ingrese un peso válido';
         amoxiclav = 'Ingrese un peso válido';
+        holliday = 'Ingrese un peso válido';
+        indicacionesApend = '';
     }
 
     document.getElementById('paracetamol_result').textContent = paracetamol;
@@ -140,6 +173,8 @@ document.getElementById('calcular').addEventListener('click', function () {
     document.getElementById('ampicilina_result').textContent = ampicilina;
     document.getElementById('cefadroxilo_result').textContent = cefadroxilo;
     document.getElementById('amoxiclav_result').textContent = amoxiclav;
+    document.getElementById('holliday_result').textContent = holliday;
+    document.getElementById('indicaciones_apendicitis').textContent = indicacionesApend;
 });
 </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
