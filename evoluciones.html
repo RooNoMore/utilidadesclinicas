@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evoluciones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        textarea{height:120px;}
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <h1 class="mb-4">Evoluciones</h1>
+        <div class="mb-3">
+            <label class="form-label">Usuario:
+                <input type="text" id="usuario" class="form-control" />
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Paciente:
+                <input type="text" id="paciente" class="form-control" />
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Evolución:</label>
+            <textarea id="evolucion" class="form-control"></textarea>
+            <div class="mt-2 d-flex gap-2">
+                <select id="evolucion_templates" class="form-select"></select>
+                <button id="apply_evo_template" class="btn btn-secondary">Aplicar</button>
+                <button id="save_evo_template" class="btn btn-outline-primary">Guardar plantilla</button>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Indicaciones:</label>
+            <textarea id="indicaciones" class="form-control"></textarea>
+            <div class="mt-2 d-flex flex-wrap gap-2">
+                <select id="indicaciones_templates" class="form-select"></select>
+                <button id="apply_ind_template" class="btn btn-secondary">Aplicar</button>
+                <button id="save_ind_template" class="btn btn-outline-primary">Guardar plantilla</button>
+                <button id="save_last_ind" class="btn btn-outline-success">Guardar últimas</button>
+                <button id="use_last_ind" class="btn btn-outline-info">Usar últimas</button>
+            </div>
+        </div>
+    </div>
+<script>
+function loadTemplates() {
+    const user = document.getElementById('usuario').value.trim();
+    const evoSel = document.getElementById('evolucion_templates');
+    const indSel = document.getElementById('indicaciones_templates');
+    const evoTemps = JSON.parse(localStorage.getItem('evolTemplates_' + user) || '[]');
+    const indTemps = JSON.parse(localStorage.getItem('indicTemplates_' + user) || '[]');
+    evoSel.innerHTML = '<option value="">- Plantillas -</option>';
+    evoTemps.forEach((t,i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = t.slice(0,30).replace(/\n/g,' ') + (t.length>30?'...':'');
+        evoSel.appendChild(opt);
+    });
+    indSel.innerHTML = '<option value="">- Plantillas -</option>';
+    indTemps.forEach((t,i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = t.slice(0,30).replace(/\n/g,' ') + (t.length>30?'...':'');
+        indSel.appendChild(opt);
+    });
+}
+
+document.getElementById('usuario').addEventListener('input', loadTemplates);
+
+document.getElementById('save_evo_template').addEventListener('click', () => {
+    const user = document.getElementById('usuario').value.trim();
+    if(!user) { alert('Ingrese usuario'); return; }
+    const text = document.getElementById('evolucion').value;
+    const key = 'evolTemplates_' + user;
+    const arr = JSON.parse(localStorage.getItem(key) || '[]');
+    arr.push(text);
+    localStorage.setItem(key, JSON.stringify(arr));
+    loadTemplates();
+});
+
+document.getElementById('apply_evo_template').addEventListener('click', () => {
+    const user = document.getElementById('usuario').value.trim();
+    const idx = document.getElementById('evolucion_templates').value;
+    if(idx === '') return;
+    const key = 'evolTemplates_' + user;
+    const arr = JSON.parse(localStorage.getItem(key) || '[]');
+    document.getElementById('evolucion').value = arr[idx] || '';
+});
+
+document.getElementById('save_ind_template').addEventListener('click', () => {
+    const user = document.getElementById('usuario').value.trim();
+    if(!user) { alert('Ingrese usuario'); return; }
+    const text = document.getElementById('indicaciones').value;
+    const key = 'indicTemplates_' + user;
+    const arr = JSON.parse(localStorage.getItem(key) || '[]');
+    arr.push(text);
+    localStorage.setItem(key, JSON.stringify(arr));
+    loadTemplates();
+});
+
+document.getElementById('apply_ind_template').addEventListener('click', () => {
+    const user = document.getElementById('usuario').value.trim();
+    const idx = document.getElementById('indicaciones_templates').value;
+    if(idx === '') return;
+    const key = 'indicTemplates_' + user;
+    const arr = JSON.parse(localStorage.getItem(key) || '[]');
+    document.getElementById('indicaciones').value = arr[idx] || '';
+});
+
+document.getElementById('save_last_ind').addEventListener('click', () => {
+    const pac = document.getElementById('paciente').value.trim();
+    if(!pac) { alert('Ingrese paciente'); return; }
+    localStorage.setItem('lastIndicaciones_' + pac, document.getElementById('indicaciones').value);
+});
+
+document.getElementById('use_last_ind').addEventListener('click', () => {
+    const pac = document.getElementById('paciente').value.trim();
+    if(!pac) { alert('Ingrese paciente'); return; }
+    const val = localStorage.getItem('lastIndicaciones_' + pac);
+    if(val !== null) {
+        document.getElementById('indicaciones').value = val;
+    } else {
+        alert('No hay indicaciones previas');
+    }
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
