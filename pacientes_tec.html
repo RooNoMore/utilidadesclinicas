@@ -4,93 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pacientes TEC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        label { display: block; margin-top: 10px; }
-        input, select, textarea { width: 100%; padding: 6px; margin-top: 4px; }
-        textarea { height: 120px; }
-        .output { margin-top: 20px; }
+        textarea{height:120px;}
     </style>
 </head>
-<body>
-    <h1>Pacientes TEC</h1>
-    <form id="tecForm">
-        <label>Antecedentes médicos:
-            <select id="antecedentes">
+<body class="bg-light">
+    <div class="container py-4">
+        <h1 class="mb-4">Pacientes TEC</h1>
+        <form id="tecForm">
+        <label class="form-label">Antecedentes médicos:
+            <select id="antecedentes" class="form-select">
                 <option value="No">No</option>
                 <option value="Si">Sí</option>
             </select>
-            <input type="text" id="antecedentes_det" placeholder="Detalles" />
+            <input type="text" id="antecedentes_det" class="form-control" placeholder="Detalles" />
         </label>
-        <label>Alergia a medicamentos:
-            <select id="alergias">
+        <label class="form-label">Alergia a medicamentos:
+            <select id="alergias" class="form-select">
                 <option value="No">No</option>
                 <option value="Si">Sí</option>
             </select>
-            <input type="text" id="alergias_det" placeholder="Detalles" />
+            <input type="text" id="alergias_det" class="form-control" placeholder="Detalles" />
         </label>
-        <label>Traído por:
-            <select id="traido">
+        <label class="form-label">Traído por:
+            <select id="traido" class="form-select">
                 <option value="su madre">Su madre</option>
                 <option value="su padre">Su padre</option>
                 <option value="otro">Otro</option>
             </select>
-            <input type="text" id="traido_det" placeholder="Especifique" />
+            <input type="text" id="traido_det" class="form-control" placeholder="Especifique" />
         </label>
-        <label>¿Hace cuánto?: <input type="text" id="hace_cuanto" /></label>
-        <label>Golpeándose en:
-            <select id="zona">
+        <label class="form-label">¿Hace cuánto?: <input type="text" id="hace_cuanto" class="form-control" /></label>
+        <label class="form-label">Golpeándose en:
+            <select id="zona" class="form-select">
                 <option value="parietal">Parietal</option>
                 <option value="occipital">Occipital</option>
                 <option value="frontal">Frontal</option>
                 <option value="temporal">Temporal</option>
             </select>
         </label>
-        <label>Lateralidad:
-            <select id="lateralidad">
+        <label class="form-label">Lateralidad:
+            <select id="lateralidad" class="form-select">
                 <option value="de la línea media">Línea media</option>
                 <option value="derecha">Derecha</option>
                 <option value="izquierda">Izquierda</option>
             </select>
         </label>
-        <label>Evolución (seleccione todas las que apliquen):</label>
-        <label><input type="checkbox" name="evolucion" value="con nauseas" /> Nauseas</label>
-        <label><input type="checkbox" name="evolucion" value="vómitos" /> Vómitos</label>
-        <label><input type="checkbox" name="evolucion" value="compromiso de conciencia" /> Compromiso de conciencia</label>
-        <label><input type="checkbox" name="evolucion" value="convulsiones" /> Convulsiones</label>
-        <label>Neurológico:
-            <select id="neuro">
+        <label class="form-label">Evolución (seleccione todas las que apliquen):</label>
+        <label class="form-check">
+            <input type="checkbox" class="form-check-input" name="evolucion" value="con nauseas" /> Nauseas
+        </label>
+        <label class="form-check">
+            <input type="checkbox" class="form-check-input" name="evolucion" value="vómitos" /> Vómitos
+        </label>
+        <label class="form-check">
+            <input type="checkbox" class="form-check-input" name="evolucion" value="compromiso de conciencia" /> Compromiso de conciencia
+        </label>
+        <label class="form-check">
+            <input type="checkbox" class="form-check-input" name="evolucion" value="convulsiones" /> Convulsiones
+        </label>
+        <label class="form-label">Neurológico:
+            <select id="neuro" class="form-select">
                 <option value="NC y motor sin alteraciones evidentes">NC y motor sin alteraciones evidentes</option>
                 <option value="alterado">Alterado</option>
             </select>
-            <input type="text" id="neuro_det" placeholder="Detalles" />
+            <input type="text" id="neuro_det" class="form-control" placeholder="Detalles" />
         </label>
-        <label>GSC (3-15): <input type="number" id="gsc" min="3" max="15" /></label>
-        <label>Herida:
-            <select id="herida">
+        <label>GSC (3-15): <input type="number" id="gsc" min="3" max="15" class="form-control" /></label>
+        <label class="form-label">Herida:
+            <select id="herida" class="form-select">
                 <option value="No">No</option>
                 <option value="Si">Sí</option>
             </select>
-            <input type="text" id="herida_det" placeholder="Detalles" />
+            <input type="text" id="herida_det" class="form-control" placeholder="Detalles" />
         </label>
-        <label>Actualmente:
-            <select id="actual">
+        <label class="form-label">Actualmente:
+            <select id="actual" class="form-select">
                 <option value="asintomático">Asintomático</option>
                 <option value="sintomático">Sintomático</option>
             </select>
-            <input type="text" id="actual_det" placeholder="Detalles" />
+            <input type="text" id="actual_det" class="form-control" placeholder="Detalles" />
         </label>
-        <label>Peso (kg): <input type="number" id="peso" step="0.1" /></label>
-        <button type="submit">Generar texto</button>
+        <label class="form-label">Peso (kg): <input type="number" id="peso" step="0.1" class="form-control" /></label>
+        <button type="submit" class="btn btn-primary mt-3">Generar texto</button>
     </form>
-    <div class="output">
-        <label>Resultado:</label>
-        <textarea id="resultado" readonly></textarea>
+    <div class="mb-3">
+        <label class="form-label">Resultado:</label>
+        <textarea id="resultado" class="form-control" readonly></textarea>
     </div>
-    <div class="output">
-        <label>Indicaciones:</label>
-        <textarea id="indicaciones" readonly></textarea>
+    <div class="mb-3">
+        <label class="form-label">Indicaciones:</label>
+        <textarea id="indicaciones" class="form-control" readonly></textarea>
+    </div>
     </div>
 
 <script>
@@ -136,7 +142,7 @@ form.addEventListener('submit', function(event) {
     document.getElementById('resultado').value = texto;
 
     const pesoNum = parseFloat(peso);
-    const ibuprofeno = !isNaN(pesoNum) ? (pesoNum * 10 / 40).toFixed(2) : '[peso*10/40]';
+    const ibuprofeno = !isNaN(pesoNum) ? (pesoNum * 10 / 40).toFixed(1) : '[peso*10/40]';
     let indicaciones = '';
     indicaciones += '1. Reposo Relativo, observación por un adulto por 24-48 horas\n';
     indicaciones += '2. Regimen liviano\n';
@@ -145,8 +151,9 @@ form.addEventListener('submit', function(event) {
     indicaciones += '5. Frío Local\n';
     indicaciones += '6. Si presenta síntomas de alarma (explicados y en hoja TEC) consultar en servicio de urgencias a la brevedad';
 
-    document.getElementById('indicaciones').value = indicaciones;
+document.getElementById('indicaciones').value = indicaciones;
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
