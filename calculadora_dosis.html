@@ -20,33 +20,126 @@
             <li class="list-group-item">
                 <strong>Paracetamol:</strong> <span id="paracetamol_result"></span>
             </li>
+            <li class="list-group-item">
+                <strong>Ketorolaco:</strong> <span id="ketorolaco_result"></span>
+            </li>
+            <li class="list-group-item">
+                <strong>Ketoprofeno:</strong> <span id="ketoprofeno_result"></span>
+            </li>
+            <li class="list-group-item">
+                <strong>Metamizol:</strong> <span id="metamizol_result"></span>
+            </li>
+        </ul>
+
+        <h2 class="mt-5">Antibióticos</h2>
+        <ul class="list-group mt-3">
+            <li class="list-group-item">
+                <strong>Amikacina:</strong> <span id="amikacina_result"></span>
+            </li>
+            <li class="list-group-item">
+                <strong>Metronidazol:</strong> <span id="metronidazol_result"></span>
+            </li>
+            <li class="list-group-item">
+                <strong>Ampicilina:</strong> <span id="ampicilina_result"></span>
+            </li>
+            <li class="list-group-item">
+                <strong>Cefadroxilo:</strong> <span id="cefadroxilo_result"></span>
+            </li>
+            <li class="list-group-item">
+                <strong>Amoxicilina/Ac. clavulánico:</strong> <span id="amoxiclav_result"></span>
+            </li>
         </ul>
     </div>
 
 <script>
 document.getElementById('calcular').addEventListener('click', function () {
     const peso = parseFloat(document.getElementById('peso').value);
-    let texto = '';
+    let paracetamol = '';
+    let ketorolaco = '';
+    let ketoprofeno = '';
+    let metamizol = '';
+    let amikacina = '';
+    let metronidazol = '';
+    let ampicilina = '';
+    let cefadroxilo = '';
+    let amoxiclav = '';
+
     if (!isNaN(peso)) {
+        // Paracetamol
         if (peso <= 13) {
             const gotas = (peso * 3).toFixed(0);
-            texto = gotas + ' gotas c/8h';
+            paracetamol = gotas + ' gotas c/8h';
         } else if (peso > 13 && peso < 18) {
             const ml = (peso * 0.46).toFixed(1);
-            texto = ml + ' ml de jarabe 160mg/5ml c/8h';
+            paracetamol = ml + ' ml de jarabe 160mg/5ml c/8h';
         } else if (peso >= 18 && peso < 25) {
-            texto = 'Paracetamol 500mg 1/2 comprimido c/8h VO';
+            paracetamol = 'Paracetamol 500mg 1/2 comprimido c/8h VO';
         } else if (peso >= 25 && peso < 32) {
-            texto = 'Paracetamol 500mg 1/2 comprimido c/6h VO';
+            paracetamol = 'Paracetamol 500mg 1/2 comprimido c/6h VO';
         } else if (peso >= 32 && peso < 45) {
-            texto = 'Paracetamol 500mg 1 comprimido c/8h por 3 días';
+            paracetamol = 'Paracetamol 500mg 1 comprimido c/8h por 3 días';
         } else {
-            texto = 'Paracetamol 1g c/8h VO';
+            paracetamol = 'Paracetamol 1g c/8h VO';
+        }
+
+        // Ketorolaco 0,5mg/kg c/8h EV (máx 30mg por dosis)
+        const ktrMg = Math.min(peso * 0.5, 30).toFixed(0);
+        ketorolaco = ktrMg + ' mg c/8h EV';
+
+        // Ketoprofeno 0,5-1mg/kg c/8h EV (máx 100mg por dosis)
+        const ktpLow = Math.min(peso * 0.5, 100);
+        const ktpHigh = Math.min(peso * 1, 100);
+        if (ktpLow === ktpHigh) {
+            ketoprofeno = ktpHigh.toFixed(0) + ' mg c/8h EV';
+        } else {
+            ketoprofeno = ktpLow.toFixed(0) + '-' + ktpHigh.toFixed(0) + ' mg c/8h EV';
+        }
+
+        // Metamizol 15mg/kg c/8h EV
+        metamizol = (peso * 15).toFixed(0) + ' mg c/8h EV';
+
+        // Antibióticos
+        // Amikacina 15mg/kg c/24h (máx 1g)
+        amikacina = Math.min(peso * 15, 1000).toFixed(0) + ' mg c/24h';
+
+        // Metronidazol 10mg/kg c/8h EV (máx 500mg por dosis)
+        metronidazol = Math.min(peso * 10, 500).toFixed(0) + ' mg c/8h EV';
+
+        // Ampicilina 50mg/kg c/6h EV (máx 2g por dosis)
+        ampicilina = Math.min(peso * 50, 2000).toFixed(0) + ' mg c/6h EV';
+
+        // Cefadroxilo 15mg/kg c/12h VO (máx 500mg por dosis)
+        cefadroxilo = Math.min(peso * 15, 500).toFixed(0) + ' mg c/12h VO';
+
+        // Amoxicilina/Ac clavulánico
+        if (peso >= 35) {
+            amoxiclav = '1 comprimido (875/125mg) c/12h VO';
+        } else {
+            const amoxMg = peso * 25;
+            const ml = (amoxMg / 80).toFixed(1);
+            amoxiclav = ml + ' ml de suspensión 400mg/57mg en 5ml c/12h VO';
         }
     } else {
-        texto = 'Ingrese un peso válido';
+        paracetamol = 'Ingrese un peso válido';
+        ketorolaco = 'Ingrese un peso válido';
+        ketoprofeno = 'Ingrese un peso válido';
+        metamizol = 'Ingrese un peso válido';
+        amikacina = 'Ingrese un peso válido';
+        metronidazol = 'Ingrese un peso válido';
+        ampicilina = 'Ingrese un peso válido';
+        cefadroxilo = 'Ingrese un peso válido';
+        amoxiclav = 'Ingrese un peso válido';
     }
-    document.getElementById('paracetamol_result').textContent = texto;
+
+    document.getElementById('paracetamol_result').textContent = paracetamol;
+    document.getElementById('ketorolaco_result').textContent = ketorolaco;
+    document.getElementById('ketoprofeno_result').textContent = ketoprofeno;
+    document.getElementById('metamizol_result').textContent = metamizol;
+    document.getElementById('amikacina_result').textContent = amikacina;
+    document.getElementById('metronidazol_result').textContent = metronidazol;
+    document.getElementById('ampicilina_result').textContent = ampicilina;
+    document.getElementById('cefadroxilo_result').textContent = cefadroxilo;
+    document.getElementById('amoxiclav_result').textContent = amoxiclav;
 });
 </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
