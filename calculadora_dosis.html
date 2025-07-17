@@ -9,8 +9,46 @@
 <body class="bg-light">
     <div class="container py-5">
         <h1 class="mb-4">Calculadora de dosis</h1>
-        <p class="lead">En construcción...</p>
+        <div class="mb-3">
+            <label for="peso" class="form-label">Peso (kg)</label>
+            <input type="number" id="peso" step="0.1" class="form-control">
+        </div>
+        <button id="calcular" class="btn btn-primary">Calcular</button>
+
+        <h2 class="mt-5">Analgésicos</h2>
+        <ul class="list-group mt-3">
+            <li class="list-group-item">
+                <strong>Paracetamol:</strong> <span id="paracetamol_result"></span>
+            </li>
+        </ul>
     </div>
+
+<script>
+document.getElementById('calcular').addEventListener('click', function () {
+    const peso = parseFloat(document.getElementById('peso').value);
+    let texto = '';
+    if (!isNaN(peso)) {
+        if (peso <= 13) {
+            const gotas = (peso * 3).toFixed(0);
+            texto = gotas + ' gotas c/8h';
+        } else if (peso > 13 && peso < 18) {
+            const ml = (peso * 0.46).toFixed(1);
+            texto = ml + ' ml de jarabe 160mg/5ml c/8h';
+        } else if (peso >= 18 && peso < 25) {
+            texto = 'Paracetamol 500mg 1/2 comprimido c/8h VO';
+        } else if (peso >= 25 && peso < 32) {
+            texto = 'Paracetamol 500mg 1/2 comprimido c/6h VO';
+        } else if (peso >= 32 && peso < 45) {
+            texto = 'Paracetamol 500mg 1 comprimido c/8h por 3 días';
+        } else {
+            texto = 'Paracetamol 1g c/8h VO';
+        }
+    } else {
+        texto = 'Ingrese un peso válido';
+    }
+    document.getElementById('paracetamol_result').textContent = texto;
+});
+</script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
