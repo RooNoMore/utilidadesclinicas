@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes TEC</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        label { display: block; margin-top: 10px; }
+        input, select, textarea { width: 100%; padding: 6px; margin-top: 4px; }
+        textarea { height: 120px; }
+        .output { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Pacientes TEC</h1>
+    <form id="tecForm">
+        <label>Antecedentes médicos:
+            <select id="antecedentes">
+                <option value="No">No</option>
+                <option value="Si">Sí</option>
+            </select>
+            <input type="text" id="antecedentes_det" placeholder="Detalles" />
+        </label>
+        <label>Alergia a medicamentos:
+            <select id="alergias">
+                <option value="No">No</option>
+                <option value="Si">Sí</option>
+            </select>
+            <input type="text" id="alergias_det" placeholder="Detalles" />
+        </label>
+        <label>Traído por:
+            <select id="traido">
+                <option value="su madre">Su madre</option>
+                <option value="su padre">Su padre</option>
+                <option value="otro">Otro</option>
+            </select>
+            <input type="text" id="traido_det" placeholder="Especifique" />
+        </label>
+        <label>¿Hace cuánto?: <input type="text" id="hace_cuanto" /></label>
+        <label>Golpeándose en:
+            <select id="zona">
+                <option value="parietal">Parietal</option>
+                <option value="occipital">Occipital</option>
+                <option value="frontal">Frontal</option>
+                <option value="temporal">Temporal</option>
+            </select>
+        </label>
+        <label>Lateralidad:
+            <select id="lateralidad">
+                <option value="de la línea media">Línea media</option>
+                <option value="derecha">Derecha</option>
+                <option value="izquierda">Izquierda</option>
+            </select>
+        </label>
+        <label>Evolución (seleccione todas las que apliquen):</label>
+        <label><input type="checkbox" name="evolucion" value="con nauseas" /> Nauseas</label>
+        <label><input type="checkbox" name="evolucion" value="vómitos" /> Vómitos</label>
+        <label><input type="checkbox" name="evolucion" value="compromiso de conciencia" /> Compromiso de conciencia</label>
+        <label><input type="checkbox" name="evolucion" value="convulsiones" /> Convulsiones</label>
+        <label>Neurológico:
+            <select id="neuro">
+                <option value="NC y motor sin alteraciones evidentes">NC y motor sin alteraciones evidentes</option>
+                <option value="alterado">Alterado</option>
+            </select>
+            <input type="text" id="neuro_det" placeholder="Detalles" />
+        </label>
+        <label>GSC (3-15): <input type="number" id="gsc" min="3" max="15" /></label>
+        <label>Herida:
+            <select id="herida">
+                <option value="No">No</option>
+                <option value="Si">Sí</option>
+            </select>
+            <input type="text" id="herida_det" placeholder="Detalles" />
+        </label>
+        <label>Actualmente:
+            <select id="actual">
+                <option value="asintomático">Asintomático</option>
+                <option value="sintomático">Sintomático</option>
+            </select>
+            <input type="text" id="actual_det" placeholder="Detalles" />
+        </label>
+        <label>Peso (kg): <input type="number" id="peso" step="0.1" /></label>
+        <button type="submit">Generar texto</button>
+    </form>
+    <div class="output">
+        <label>Resultado:</label>
+        <textarea id="resultado" readonly></textarea>
+    </div>
+
+<script>
+const form = document.getElementById('tecForm');
+form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const antecedentes = document.getElementById('antecedentes').value;
+    const antecedentes_det = document.getElementById('antecedentes_det').value.trim();
+    const alergias = document.getElementById('alergias').value;
+    const alergias_det = document.getElementById('alergias_det').value.trim();
+    let traido = document.getElementById('traido').value;
+    const traido_det = document.getElementById('traido_det').value.trim();
+    if (traido === 'otro' && traido_det) {
+        traido = traido_det;
+    }
+    const hace = document.getElementById('hace_cuanto').value.trim();
+    const zona = document.getElementById('zona').value;
+    const lateralidad = document.getElementById('lateralidad').value;
+    const evolucionChecks = document.querySelectorAll('input[name="evolucion"]:checked');
+    const evolucion = Array.from(evolucionChecks).map(el => el.value).join(' y ');
+    let neuro = document.getElementById('neuro').value;
+    const neuro_det = document.getElementById('neuro_det').value.trim();
+    if (neuro === 'alterado' && neuro_det) {
+        neuro = 'Alterado: ' + neuro_det;
+    }
+    const gsc = document.getElementById('gsc').value;
+    const herida = document.getElementById('herida').value;
+    const herida_det = document.getElementById('herida_det').value.trim();
+    const actual = document.getElementById('actual').value;
+    const actual_det = document.getElementById('actual_det').value.trim();
+    const peso = document.getElementById('peso').value;
+
+    let texto = '';
+    texto += 'AM: ' + antecedentes + (antecedentes === 'Si' && antecedentes_det ? ' - ' + antecedentes_det : '') + '\n';
+    texto += 'Alergias: ' + alergias + (alergias === 'Si' && alergias_det ? ' - ' + alergias_det : '') + '\n';
+    texto += 'Traído por ' + traido + '. Refiere que hace ' + hace + ' se cae y se golpea en región ' + zona + ' ' + lateralidad + ', evolucionando ' + evolucion + '.\n';
+    texto += 'Al examen físico:\n';
+    texto += 'Neurológico: ' + neuro + '. GSC ' + gsc + '.\n';
+    texto += 'Herida: ' + herida + (herida === 'Si' && herida_det ? ' - ' + herida_det : '') + '.\n';
+    texto += 'Actualmente ' + actual + (actual === 'sintomático' && actual_det ? ': ' + actual_det : '') + '.\n';
+    if (peso) texto += 'Peso: ' + peso + ' kg.';
+
+    document.getElementById('resultado').value = texto;
+});
+</script>
+</body>
+</html>
