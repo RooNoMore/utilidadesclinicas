@@ -88,6 +88,10 @@
         <label>Resultado:</label>
         <textarea id="resultado" readonly></textarea>
     </div>
+    <div class="output">
+        <label>Indicaciones:</label>
+        <textarea id="indicaciones" readonly></textarea>
+    </div>
 
 <script>
 const form = document.getElementById('tecForm');
@@ -130,6 +134,18 @@ form.addEventListener('submit', function(event) {
     if (peso) texto += 'Peso: ' + peso + ' kg.';
 
     document.getElementById('resultado').value = texto;
+
+    const pesoNum = parseFloat(peso);
+    const ibuprofeno = !isNaN(pesoNum) ? (pesoNum * 10 / 40).toFixed(2) : '[peso*10/40]';
+    let indicaciones = '';
+    indicaciones += '1. Reposo Relativo, observación por un adulto por 24-48 horas\n';
+    indicaciones += '2. Regimen liviano\n';
+    indicaciones += '3. Ibuprofeno 200mg/5ml dar ' + ibuprofeno + ' mL c/8h por 3 días\n';
+    indicaciones += '4. Hoja TEC\n';
+    indicaciones += '5. Frío Local\n';
+    indicaciones += '6. Si presenta síntomas de alarma (explicados y en hoja TEC) consultar en servicio de urgencias a la brevedad';
+
+    document.getElementById('indicaciones').value = indicaciones;
 });
 </script>
 </body>
