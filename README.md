@@ -7,6 +7,7 @@ Pequeña colección de utilidades médicas publicada como sitio estático. El
   clínica de pacientes con traumatismo encéfalocraneano.
  - **Calculadora de dosis**: utilitario que calcula la dosis de paracetamol
    según el peso del paciente.
+- **StarCraft II Build Orders**: página para gestionar build orders y counters.
 
 Estas páginas pueden alojarse en GitHub Pages simplemente subiendo el contenido
 del repositorio y seleccionando la rama adecuada en la configuración del

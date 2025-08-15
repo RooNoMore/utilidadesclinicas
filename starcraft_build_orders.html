@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StarCraft II - Build Orders</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <h1 class="mb-4">StarCraft II - Build Orders</h1>
+    <div class="mb-3">
+      <label for="matchup" class="form-label">Elige enfrentamiento</label>
+      <select id="matchup" class="form-select">
+        <option value="">Seleccionar...</option>
+        <option value="PvP">Protoss vs Protoss</option>
+        <option value="PvZ">Protoss vs Zerg</option>
+        <option value="PvT">Protoss vs Terran</option>
+      </select>
+    </div>
+    <div id="build-orders" class="mb-4"></div>
+    <h2 class="h4">Buscador de counters</h2>
+    <div class="input-group">
+      <input type="text" id="enemy-strategy" class="form-control" placeholder="Estrategia enemiga (ej. mass air)">
+      <button class="btn btn-primary" id="counter-btn">Buscar</button>
+    </div>
+    <div id="counter-result" class="mt-3"></div>
+  </div>
+
+  <script src="starcraft.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
