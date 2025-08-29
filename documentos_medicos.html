@@ -120,6 +120,12 @@ function fechaActual() {
     return `${hoy.getDate().toString().padStart(2,'0')} de ${meses[hoy.getMonth()]} del ${hoy.getFullYear()}`;
 }
 
+function formatearFecha(fechaISO) {
+    if (!fechaISO) return '';
+    const [ano, mes, dia] = fechaISO.split('-');
+    return `${dia}-${mes}-${ano}`;
+}
+
 function generarCertificado() {
     const doc = new jsPDF();
     const margen = 30;
@@ -189,14 +195,14 @@ function generarImagenologia() {
     doc.setFont(undefined, 'bold');
     doc.text(examen, 105, y, { align: 'center' });
     doc.setFont(undefined, 'normal');
-    y += 30;
+    y += 50;
     doc.line(60, y, 150, y);
     y += 5;
     doc.text(medico, 105, y, { align: 'center' });
     y += 5;
     doc.text(medRut, 105, y, { align: 'center' });
-    y += 20;
-    doc.text(`Fecha: ${fecha}`, 14, y);
+    const paginaAlto = doc.internal.pageSize.getHeight();
+    doc.text(`Fecha: ${formatearFecha(fecha)}`, 14, paginaAlto - 20);
     doc.save('solicitud_imagenes.pdf');
 }
 
