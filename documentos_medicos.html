@@ -123,6 +123,7 @@ function fechaActual() {
 function generarCertificado() {
     const doc = new jsPDF();
     const margen = 30;
+    const ancho = doc.internal.pageSize.getWidth() - margen * 2;
     doc.text(fechaActual(), 210 - margen, margen, { align: 'right' });
     doc.setFontSize(16);
     doc.text('CERTIFICADO MEDICO', 105, margen + 10, { align: 'center' });
@@ -136,7 +137,7 @@ function generarCertificado() {
     const medico = document.getElementById('certMedico').value;
     const medRut = document.getElementById('certMedRut').value;
     const contenido = `
-        <div style="font-size:14px; line-height:1.6;">
+        <div style="font-size:12px; line-height:1.6;">
             <p style="text-align: justify;">
                 Certifico que el paciente <b>${nombre}</b> de RUT <b>${rut}</b> fue evaluado y presenta diagnóstico de <b>${diag}</b>, y deberá guardar reposo entre el <b>${inicio}</b> y el <b>${fin}</b>. Extiendo este certificado para ser presentado en <b>${est}</b>.
             </p>
@@ -153,7 +154,8 @@ function generarCertificado() {
     doc.html(contenido, {
         x: margen,
         y: margen + 20,
-        width: 150,
+        width: ancho,
+        windowWidth: ancho * 3.78,
         callback: function (doc) {
             doc.save('certificado_medico.pdf');
         }
