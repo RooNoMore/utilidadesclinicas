@@ -185,18 +185,18 @@ function generarImagenologia() {
             ['Diagnóstico', diag]
         ]
     });
-    let y = doc.lastAutoTable.finalY + 10;
+    let y = doc.lastAutoTable.finalY + 20;
     doc.setFont(undefined, 'bold');
     doc.text(examen, 105, y, { align: 'center' });
     doc.setFont(undefined, 'normal');
-    y += 20;
-    doc.text(`Fecha: ${fecha}`, 14, y);
     y += 30;
     doc.line(60, y, 150, y);
     y += 5;
     doc.text(medico, 105, y, { align: 'center' });
     y += 5;
     doc.text(medRut, 105, y, { align: 'center' });
+    y += 20;
+    doc.text(`Fecha: ${fecha}`, 14, y);
     doc.save('solicitud_imagenes.pdf');
 }
 
