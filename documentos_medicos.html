@@ -119,9 +119,10 @@ function fechaActual() {
 
 function generarCertificado() {
     const doc = new jsPDF();
-    doc.text(fechaActual(), 200, 20, { align: 'right' });
+    const margen = 25;
+    doc.text(fechaActual(), 210 - margen, margen, { align: 'right' });
     doc.setFontSize(14);
-    doc.text('CERTIFICADO MEDICO', 105, 30, { align: 'center' });
+    doc.text('CERTIFICADO MEDICO', 105, margen + 10, { align: 'center' });
     doc.setFontSize(12);
     const nombre = document.getElementById('certNombre').value;
     const rut = document.getElementById('certRut').value;
@@ -131,14 +132,25 @@ function generarCertificado() {
     const est = document.getElementById('certEst').value;
     const medico = document.getElementById('certMedico').value;
     const medRut = document.getElementById('certMedRut').value;
-    const cuerpo = `Certifico que el paciente ${nombre} de RUT ${rut} fue evaluado y presenta diagnóstico de ${diag}, y deberá guardar reposo entre el ${inicio} y el ${fin}. Extiendo este certificado para ser presentado en ${est}.`;
-    const texto = doc.splitTextToSize(cuerpo, 180);
-    doc.text(texto, 15, 50, { align: 'justify' });
-    doc.text('Atentamente.', 15, 90);
-    doc.line(15, 120, 195, 120);
-    doc.text(medico, 105, 130, { align: 'center' });
-    doc.text(medRut, 105, 140, { align: 'center' });
-    doc.save('certificado_medico.pdf');
+    const contenido = `
+        <div style="font-size:12px; line-height:1.6;">
+            <p style="text-align: justify;">
+                Certifico que el paciente <b>${nombre}</b> de RUT <b>${rut}</b> fue evaluado y presenta diagnóstico de <b>${diag}</b>, y deberá guardar reposo entre el <b>${inicio}</b> y el <b>${fin}</b>. Extiendo este certificado para ser presentado en <b>${est}</b>.
+            </p>
+            <p style="margin-top: 20px;">Atentamente.</p>
+            <div style="margin-top: 40px; text-align: center;">
+                <hr>
+                <p>${medico}<br>${medRut}</p>
+            </div>
+        </div>`;
+    doc.html(contenido, {
+        x: margen,
+        y: margen + 20,
+        width: 160,
+        callback: function (doc) {
+            doc.save('certificado_medico.pdf');
+        }
+    });
 }
 
 function generarImagenologia() {
