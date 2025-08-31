@@ -60,6 +60,29 @@
         </div>
     </form>
 
+    <form id="formSalud" class="d-none">
+        <div class="mb-3">
+            <label class="form-label">Nombre del paciente</label>
+            <input type="text" id="saludNombre" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">RUT del paciente</label>
+            <input type="text" id="saludRut" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Motivo del certificado</label>
+            <input type="text" id="saludMotivo" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Nombre del médico</label>
+            <input type="text" id="saludMedico" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">RUT del médico</label>
+            <input type="text" id="saludMedRut" class="form-control">
+        </div>
+    </form>
+
     <form id="formImagenologia" class="d-none">
         <div class="mb-3">
             <label class="form-label">Nombre del paciente</label>
@@ -111,6 +134,7 @@ const { jsPDF } = window.jspdf;
 
 function mostrarFormulario(tipo) {
     document.getElementById('formCertificado').classList.toggle('d-none', tipo !== 'certificado');
+    document.getElementById('formSalud').classList.toggle('d-none', tipo !== 'salud');
     document.getElementById('formImagenologia').classList.toggle('d-none', tipo !== 'imagenologia');
 }
 
@@ -168,6 +192,45 @@ function generarCertificado() {
     });
 }
 
+function generarSalud() {
+    const doc = new jsPDF();
+    const margen = 30;
+    const ancho = doc.internal.pageSize.getWidth() - margen * 2;
+    doc.text(fechaActual(), 210 - margen, margen, { align: 'right' });
+    doc.setFontSize(16);
+    doc.text('CERTIFICADO DE SALUD', 105, margen + 10, { align: 'center' });
+    doc.setFontSize(14);
+    const nombre = document.getElementById('saludNombre').value;
+    const rut = document.getElementById('saludRut').value;
+    const motivo = document.getElementById('saludMotivo').value;
+    const medico = document.getElementById('saludMedico').value;
+    const medRut = document.getElementById('saludMedRut').value;
+    const contenido = `
+        <div style="font-size:12px; line-height:1.6;">
+            <p style="text-align: justify;">
+                Certifico que <b>${nombre}</b>, de RUT <b>${rut}</b> fue evaluada y cuenta con buena salud para <b>${motivo}</b>. Extiendo este certificado para los fines que estime conveniente.
+            </p>
+            <p style="margin-top: 20px;">Atentamente</p>
+            <div style="margin-top: 40px; text-align: center;">
+                <hr>
+                <p>${medico}<br>${medRut}</p>
+            </div>
+        </div>`;
+    if (typeof DOMPurify === 'undefined') {
+        alert('No se pudo cargar DOMPurify, necesario para generar el PDF.');
+        return;
+    }
+    doc.html(contenido, {
+        x: margen,
+        y: margen + 20,
+        width: ancho,
+        windowWidth: ancho * 3.78,
+        callback: function (doc) {
+            doc.save('certificado_salud.pdf');
+        }
+    });
+}
+
 function generarImagenologia() {
     const doc = new jsPDF();
     doc.setFontSize(14);
@@ -216,6 +279,8 @@ document.getElementById('generar').addEventListener('click', () => {
     const tipo = document.getElementById('tipoDocumento').value;
     if (tipo === 'certificado') {
         generarCertificado();
+    } else if (tipo === 'salud') {
+        generarSalud();
     } else if (tipo === 'imagenologia') {
         generarImagenologia();
     } else {
