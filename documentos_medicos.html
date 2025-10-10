@@ -110,7 +110,12 @@
                 <option>Radiografía de tórax</option>
                 <option>Radiografía de abdomen</option>
                 <option>Ecografía abdominal</option>
+                <option value="otro">Otro examen</option>
             </select>
+        </div>
+        <div class="mb-3 d-none" id="imgOtroExamenGroup">
+            <label class="form-label" for="imgOtroExamen">Especificar examen solicitado</label>
+            <input type="text" id="imgOtroExamen" class="form-control" placeholder="Ingrese el examen solicitado">
         </div>
         <div class="mb-3">
             <label class="form-label">Fecha</label>
@@ -239,7 +244,11 @@ function generarImagenologia() {
     const rut = document.getElementById('imgRut').value;
     const edad = document.getElementById('imgEdad').value;
     const diag = document.getElementById('imgDiag').value;
-    const examen = document.getElementById('imgExamen').value;
+    let examen = document.getElementById('imgExamen').value;
+    if (examen === 'otro') {
+        const examenPersonalizado = document.getElementById('imgOtroExamen').value.trim();
+        examen = examenPersonalizado || 'Examen no especificado';
+    }
     const fecha = document.getElementById('imgFecha').value;
     const medico = document.getElementById('imgMedico').value;
     const medRut = document.getElementById('imgMedRut').value;
@@ -274,6 +283,18 @@ document.getElementById('tipoDocumento').addEventListener('change', function() {
 });
 
 mostrarFormulario(document.getElementById('tipoDocumento').value);
+
+const imgExamen = document.getElementById('imgExamen');
+const imgOtroExamenGroup = document.getElementById('imgOtroExamenGroup');
+
+if (imgExamen && imgOtroExamenGroup) {
+    const actualizarVisibilidadOtroExamen = () => {
+        const mostrar = imgExamen.value === 'otro';
+        imgOtroExamenGroup.classList.toggle('d-none', !mostrar);
+    };
+    imgExamen.addEventListener('change', actualizarVisibilidadOtroExamen);
+    actualizarVisibilidadOtroExamen();
+}
 
 document.getElementById('generar').addEventListener('click', () => {
     const tipo = document.getElementById('tipoDocumento').value;
