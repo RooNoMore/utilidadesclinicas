@@ -1,0 +1,204 @@
+import React, { useState, useEffect } from 'react';
+import { Copy, RefreshCw, ClipboardCheck, User, Activity, Wind, Droplets, Utensils, MessageSquare } from 'lucide-react';
+
+const App = () => {
+  const [formData, setFormData] = useState({
+    condicionGeneral: 'en buenas condiciones generales',
+    hemodinamia: 'hemodinámicamente estable',
+    respiratorio: 'sin requerimientos de O2 adicional',
+    diuresis: 'Diuresis sí',
+    deposiciones: 'Deposiciones sí',
+    gases: 'Elimina gases',
+    toleranciaOral: 'con buena tolerancia oral a régimen liviano',
+    otros: ''
+  });
+
+  const [generatedText, setGeneratedText] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const options = {
+    condicionGeneral: [
+      { label: 'Buenas condiciones', value: 'en buenas condiciones generales' },
+      { label: 'Estable', value: 'estable' },
+      { label: 'Regulares condiciones', value: 'en regulares condiciones' },
+      { label: 'De cuidado', value: 'de cuidado' }
+    ],
+    hemodinamia: [
+      { label: 'Estable', value: 'hemodinámicamente estable' },
+      { label: 'DVA', value: 'con requerimiento de DVA' },
+      { label: 'Inestable', value: 'hemodinámicamente inestable' }
+    ],
+    respiratorio: [
+      { label: 'Aire ambiental', value: 'sin requerimientos de O2 adicional' },
+      { label: 'Naricera', value: 'con apoyo de naricera' },
+      { label: 'VMNI', value: 'en VMNI' },
+      { label: 'VMI', value: 'en VMI' }
+    ],
+    diuresis: [
+      { label: 'Sí', value: 'Diuresis sí' },
+      { label: 'Escasa', value: 'Diuresis escasa' },
+      { label: 'No', value: 'Sin diuresis' }
+    ],
+    deposiciones: [
+      { label: 'Sí', value: 'Deposiciones sí' },
+      { label: 'No', value: 'Deposiciones no' },
+      { label: 'Diarreicas', value: 'Deposiciones diarreicas' }
+    ],
+    gases: [
+      { label: 'Sí', value: 'Elimina gases' },
+      { label: 'No', value: 'No elimina gases' }
+    ],
+    toleranciaOral: [
+      { label: 'R. Liviano', value: 'con buena tolerancia oral a régimen liviano' },
+      { label: 'R. Líquido', value: 'con buena tolerancia oral a régimen líquido' },
+      { label: 'R. Hídrico', value: 'con buena tolerancia oral a régimen hídrico' },
+      { label: 'R. Cero', value: 'en régimen cero' }
+    ]
+  };
+
+  useEffect(() => {
+    const text = `Paciente ${formData.condicionGeneral}, ${formData.hemodinamia}, ${formData.respiratorio}. ${formData.diuresis}. ${formData.deposiciones}. ${formData.gases}. Paciente ${formData.toleranciaOral}.${formData.otros ? ' ' + formData.otros : ''}`;
+    setGeneratedText(text);
+  }, [formData]);
+
+  const handleCopy = () => {
+    const textArea = document.createElement("textarea");
+    textArea.value = generatedText;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Error al copiar', err);
+    }
+    document.body.removeChild(textArea);
+  };
+
+  const resetForm = () => {
+    setFormData({
+      condicionGeneral: 'en buenas condiciones generales',
+      hemodinamia: 'hemodinámicamente estable',
+      respiratorio: 'sin requerimientos de O2 adicional',
+      diuresis: 'Diuresis sí',
+      deposiciones: 'Deposiciones sí',
+      gases: 'Elimina gases',
+      toleranciaOral: 'con buena tolerancia oral a régimen liviano',
+      otros: ''
+    });
+  };
+
+  const Section = ({ title, icon: Icon, name, choices }) => (
+    <div className="mb-6 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+      <div className="flex items-center gap-2 mb-3 text-slate-700 font-semibold">
+        <Icon size={18} className="text-blue-600" />
+        <h3>{title}</h3>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {choices.map((choice) => (
+          <button
+            key={choice.value}
+            onClick={() => setFormData(prev => ({ ...prev, [name]: choice.value }))}
+            className={`px-3 py-1.5 rounded-lg text-sm transition-all border ${
+              formData[name] === choice.value
+                ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-blue-300'
+            }`}
+          >
+            {choice.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-900">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <header className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-800">Generador de Evolución</h1>
+            <p className="text-slate-500">Cirugía Pediátrica</p>
+          </div>
+          <button 
+            onClick={resetForm}
+            className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+            title="Reiniciar campos"
+          >
+            <RefreshCw size={24} />
+          </button>
+        </header>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Form Side */}
+          <div className="space-y-2">
+            <Section title="Condición General" icon={User} name="condicionGeneral" choices={options.condicionGeneral} />
+            <Section title="Hemodinamia" icon={Activity} name="hemodinamia" choices={options.hemodinamia} />
+            <Section title="Respiratorio" icon={Wind} name="respiratorio" choices={options.respiratorio} />
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Section title="Diuresis" icon={Droplets} name="diuresis" choices={options.diuresis} />
+              <Section title="Gases" icon={MessageSquare} name="gases" choices={options.gases} />
+            </div>
+
+            <Section title="Deposiciones" icon={MessageSquare} name="deposiciones" choices={options.deposiciones} />
+            <Section title="Tolerancia Oral" icon={Utensils} name="toleranciaOral" choices={options.toleranciaOral} />
+
+            <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+              <div className="flex items-center gap-2 mb-3 text-slate-700 font-semibold">
+                <ClipboardCheck size={18} className="text-blue-600" />
+                <h3>Observaciones Adicionales</h3>
+              </div>
+              <textarea
+                value={formData.otros}
+                onChange={(e) => setFormData(prev => ({ ...prev, otros: e.target.value }))}
+                placeholder="Ej: Herida operatoria limpia, sin signos de flogosis..."
+                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none h-24 transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Preview Side */}
+          <div className="lg:sticky lg:top-8 h-fit">
+            <div className="bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden">
+              <div className="bg-blue-600 p-4 text-white flex justify-between items-center">
+                <h2 className="font-semibold flex items-center gap-2">
+                  <ClipboardCheck size={20} />
+                  Texto Generado
+                </h2>
+                <button 
+                  onClick={handleCopy}
+                  className="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg flex items-center gap-2 text-sm transition-colors"
+                >
+                  {copied ? '¡Copiado!' : <><Copy size={16} /> Copiar</>}
+                </button>
+              </div>
+              <div className="p-6">
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 min-h-[200px] text-slate-700 leading-relaxed whitespace-pre-wrap select-all">
+                  {generatedText}
+                </div>
+                <div className="mt-4 text-xs text-slate-400 italic text-center">
+                  * Haz clic en copiar para llevar el texto a tu hoja de evolución.
+                </div>
+              </div>
+            </div>
+            
+            {/* Quick Tips */}
+            <div className="mt-6 p-4 bg-amber-50 rounded-xl border border-amber-100">
+              <h4 className="text-amber-800 font-semibold text-sm mb-1 flex items-center gap-2">
+                Nota de Seguridad
+              </h4>
+              <p className="text-amber-700 text-xs leading-snug">
+                Verifique siempre el contenido generado antes de guardarlo en la ficha clínica oficial del paciente.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
